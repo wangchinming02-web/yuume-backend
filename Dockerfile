@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# 安裝必要的套件 (如 git, zip, unzip)
+# 安裝系統套件
 RUN apt-get update && apt-get install -y git zip unzip \
     && docker-php-ext-install pdo pdo_mysql
 
@@ -13,6 +13,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # 複製代碼
 COPY . /var/www/html
+
+# --- 新增這一段：安裝 PHP 依賴套件 ---
+RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
+# ------------------------------------
 
 # 設定權限
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
