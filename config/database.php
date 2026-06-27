@@ -97,7 +97,12 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
-        ],
+            
+            // --- 新增這一段強制 IPv4 ---
+            'options' => [
+                PDO::ATTR_PERSISTENT => true,
+                PDO::PGSQL_ATTR_SSL_MODE => env('DB_SSLMODE', 'prefer'),
+            ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
