@@ -75,25 +75,18 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
+            'host' => env('DB_HOST', 'aws-0-ap-southeast-1.pooler.supabase.com'),
+            'port' => env('DB_PORT', '6543'),
+            'database' => env('DB_DATABASE', 'postgres'),
+            'username' => env('DB_USERNAME', 'postgres'), // 使用環境變數 postgres
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => env('DB_SSLMODE', 'prefer'),
-            
-            // 使用陣列合併與常數檢查，確保不會報 Undefined constant
-            'options' => array_filter([
+            'sslmode' => 'require', // 重要：Pooler 必須要 SSL
+            'options' => [
                 PDO::ATTR_PERSISTENT => true,
-                defined('PDO::PGSQL_ATTR_SSL_MODE') ? PDO::PGSQL_ATTR_SSL_MODE : null => env('DB_SSLMODE', 'prefer'),
-            ]),
+            ],
         ],
-        
+
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
@@ -121,7 +114,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-database-'),
+            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-database-'),
             'persistent' => env('REDIS_PERSISTENT', false),
         ],
 
