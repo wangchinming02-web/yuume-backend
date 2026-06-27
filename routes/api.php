@@ -113,3 +113,17 @@ Route::get('/photos-by-category/{slug}', function ($slug) {
     $category = DB::table('album_categories')->where('folder_slug', $slug)->first();
     return $category ? response()->json(DB::table('photos')->where('category_id', $category->id)->orderBy('id', 'desc')->get()) : response()->json([]);
 });
+
+
+
+Route::get('/db-test', function () {
+    try {
+        DB::connection()->getPdo();
+        return response()->json(['status' => '✅ 資料庫連線成功！']);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => '❌ 資料庫連線失敗',
+            'error' => $e->getMessage() // 這會告訴我們到底是密碼錯還是網路不通
+        ], 500);
+    }
+});
