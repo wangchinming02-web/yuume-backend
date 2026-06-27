@@ -76,17 +76,17 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),
-            // 將這裡改為剛剛 ping 出來的 IPv4 位址 (例如 '54.255.219.82')
-            'host' => '54.255.219.82', 
-            'port' => 6543, // 強制使用 6543
+            'host' => env('DB_HOST', 'aws-0-ap-southeast-1.pooler.supabase.com'),
+            'port' => 6543,
             'database' => env('DB_DATABASE', 'postgres'),
-            'username' => 'postgres',
+            'username' => env('DB_USERNAME', 'postgres.jjwndfqdenndrqvekisz'), // 必須包含 .專案ID
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => 'require', // Pooler 強制使用 SSL
+            'sslmode' => 'verify-full', // Supabase Pooler 要求嚴格的 SSL 驗證
+            'options' => [
+                // 強制設定 SNI 識別碼 (這行非常關鍵！)
+                PDO::PGSQL_ATTR_SSL_MODE => 'verify-full',
+            ],
         ],
         
 
