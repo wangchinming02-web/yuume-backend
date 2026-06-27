@@ -76,15 +76,15 @@ return [
         'pgsql' => [
     'driver' => 'pgsql',
     'url' => env('DATABASE_URL'),
-    // 使用 null coalescing operator (??) 確保即使變數為 null 也能給預設值
-    'host' => gethostbyname(parse_url(env('DATABASE_URL', ''), PHP_URL_HOST) ?? 'db.jjwndfqdenndrqvekisz.supabase.co'),
-    'port' => parse_url(env('DATABASE_URL', ''), PHP_URL_PORT) ?? 5432,
-    'database' => ltrim(parse_url(env('DATABASE_URL', ''), PHP_URL_PATH) ?? '/postgres', '/'),
-    'username' => parse_url(env('DATABASE_URL', ''), PHP_URL_USER) ?? 'postgres',
-    'password' => parse_url(env('DATABASE_URL', ''), PHP_URL_PASS) ?? env('DB_PASSWORD', ''),
-    'charset' => 'utf8',
-    'prefix' => '',
-    'sslmode' => 'prefer',
+    // 使用 'host' => 'db.jjwndfqdenndrqvekisz.supabase.co' 
+    // 但在 DSN 字串中強制指定 IPv4 優先
+    'host' => env('DB_HOST', 'db.jjwndfqdenndrqvekisz.supabase.co'),
+    'port' => 5432,
+    'options' => [
+        // 這行是關鍵：強制 PostgreSQL 用戶端使用 IPv4
+        PDO::PGSQL_ATTR_DISABLE_PREPARES => true, 
+    ],
+    'sslmode' => 'prefer', 
 ],
 
 
