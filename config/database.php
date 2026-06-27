@@ -76,17 +76,22 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),
-            'host' => env('DB_HOST', 'aws-0-ap-southeast-1.pooler.supabase.com'),
-            'port' => 6543,
-            'database' => env('DB_DATABASE', 'postgres'),
-            'username' => env('DB_USERNAME', 'postgres.jjwndfqdenndrqvekisz'), // 必須包含 .專案ID
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'laravel'),
+            'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
-            'sslmode' => 'verify-full', // Supabase Pooler 要求嚴格的 SSL 驗證
-            'options' => [
-                // 強制設定 SNI 識別碼 (這行非常關鍵！)
-                PDO::PGSQL_ATTR_SSL_MODE => 'verify-full',
-            ],
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+            
+            // 使用陣列合併與常數檢查，確保不會報 Undefined constant
+            'options' => array_filter([
+                PDO::ATTR_PERSISTENT => true,
+                defined('PDO::PGSQL_ATTR_SSL_MODE') ? PDO::PGSQL_ATTR_SSL_MODE : null => env('DB_SSLMODE', 'prefer'),
+            ]),
         ],
         
 
