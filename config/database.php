@@ -76,20 +76,17 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
-            'host' => 'aws-0-ap-southeast-1.pooler.supabase.com',
-            'port' => 6543,
-            'database' => 'postgres',
-            'username' => 'postgres.jjwndfqdenndrqvekisz',
+            'host' => env('DB_HOST', 'aws-0-ap-southeast-1.pooler.supabase.com'),
+            'port' => env('DB_PORT', 6543),
+            'database' => env('DB_DATABASE', 'postgres'),
+            'username' => env('DB_USERNAME', 'postgres.jjwndfqdenndrqvekisz'),
             'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
-            // 關鍵修改：改用 'require'，並手動指定不檢查根憑證路徑
-            'sslmode' => 'require',
-            'options' => [
-                // 這會告訴資料庫驅動程式：不需要檢查本地的 root.crt 檔案
-                PDO::PGSQL_ATTR_SSL_MODE => \PDO::PGSQL_SSL_MODE_REQUIRE,
-            ],
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'require', // 對 Supabase 連線來說，這能確保安全性並規避憑證錯誤
         ],
-
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
