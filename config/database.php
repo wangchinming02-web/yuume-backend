@@ -75,16 +75,16 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', 'aws-0-ap-southeast-1.pooler.supabase.com'),
-            'port' => env('DB_PORT', '6543'),
-            'database' => env('DB_DATABASE', 'postgres'),
-            'username' => env('DB_USERNAME', 'postgres'), // 使用環境變數 postgres
-            'password' => env('DB_PASSWORD', ''),
+            'url' => env('DATABASE_URL'), // 自動抓取剛設定的 URL
+            'host' => gethostbyname(parse_url(env('DATABASE_URL'), PHP_URL_HOST)), // 強制解析為 IPv4
+            'port' => parse_url(env('DATABASE_URL'), PHP_URL_PORT) ?: 5432,
+            'database' => ltrim(parse_url(env('DATABASE_URL'), PHP_URL_PATH), '/'),
+            'username' => parse_url(env('DATABASE_URL'), PHP_URL_USER),
+            'password' => parse_url(env('DATABASE_URL'), PHP_URL_PASS),
             'charset' => 'utf8',
-            'sslmode' => 'require', // 重要：Pooler 必須要 SSL
-            'options' => [
-                PDO::ATTR_PERSISTENT => true,
-            ],
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'sslmode' => 'prefer', // 根據 Supabase 連線要求
         ],
 
 
