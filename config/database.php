@@ -76,15 +76,19 @@ return [
         'pgsql' => [
     'driver' => 'pgsql',
     'url' => env('DATABASE_URL'),
-    // 使用 'host' => 'db.jjwndfqdenndrqvekisz.supabase.co' 
-    // 但在 DSN 字串中強制指定 IPv4 優先
-    'host' => env('DB_HOST', 'db.jjwndfqdenndrqvekisz.supabase.co'),
+    // 這裡我們不再填寫網域名稱，直接給 IPv4 的數值 IP
+    // 注意：Supabase 的共享 IPv4 通常是固定的，但若有變動，請重新查詢
+    'host' => '52.77.146.31', 
     'port' => 5432,
+    'database' => 'postgres',
+    'username' => 'postgres',
+    'password' => env('DB_PASSWORD'),
+    'charset' => 'utf8',
+    'sslmode' => 'prefer',
     'options' => [
-        // 這行是關鍵：強制 PostgreSQL 用戶端使用 IPv4
-        PDO::PGSQL_ATTR_DISABLE_PREPARES => true, 
+        // 強制關閉 IPv6 支援 (部分 PHP-Postgres 驅動支援)
+        PDO::ATTR_PERSISTENT => false,
     ],
-    'sslmode' => 'prefer', 
 ],
 
 
