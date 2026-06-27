@@ -76,17 +76,17 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),
-            // 將 host 改為強制使用 IPv4 的方式
-            'host' => gethostbyname(env('DB_HOST', 'db.jjwndfqdenndrqvekisz.supabase.co')),
-            'port' => env('DB_PORT', '5432'),
+            // 將這裡改為剛剛 ping 出來的 IPv4 位址 (例如 '54.255.219.82')
+            'host' => '54.255.219.82', 
+            'port' => 6543, // 強制使用 6543
             'database' => env('DB_DATABASE', 'postgres'),
-            'username' => env('DB_USERNAME', 'postgres'),
+            'username' => 'postgres.jjwndfqdenndrqvekisz',
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
-            'sslmode' => 'prefer',
+            'sslmode' => 'require', // Pooler 強制使用 SSL
         ],
         
 
