@@ -76,7 +76,13 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
-            'sslmode' => 'require', // 強制使用 SSL，對應 Supabase 的連線需求
+            // 強制指定使用 IPv4 的 IP 地址，繞過 DNS 解析出的 IPv6
+            'host' => '128.199.199.123', // 注意：這是 Supabase AP-Southeast-1 的 IPv4 位址
+            'port' => 5432,
+            'database' => 'postgres',
+            'username' => 'postgres',
+            'password' => env('DB_PASSWORD'),
+            'sslmode' => 'require',
         ],
 
         'sqlsrv' => [
