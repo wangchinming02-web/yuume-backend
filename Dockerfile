@@ -1,8 +1,8 @@
 FROM php:8.2-apache
 
-# 安裝系統套件
-RUN apt-get update && apt-get install -y git zip unzip \
-    && docker-php-ext-install pdo pdo_mysql
+# 安裝系統套件 (改成PostgreSQL)
+RUN apt-get update && apt-get install -y git zip unzip libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql
 
 # 設定 Laravel 的 Document Root
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
