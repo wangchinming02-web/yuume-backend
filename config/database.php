@@ -75,12 +75,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => parse_url(env('DATABASE_URL'), PHP_URL_HOST),
-            'port' => parse_url(env('DATABASE_URL'), PHP_URL_PORT),
-            'database' => ltrim(parse_url(env('DATABASE_URL'), PHP_URL_PATH), '/'),
-            'username' => parse_url(env('DATABASE_URL'), PHP_URL_USER),
-            'password' => parse_url(env('DATABASE_URL'), PHP_URL_PASS),
+            'host' => 'aws-0-ap-southeast-1.pooler.supabase.com',
+            'port' => 6543,
+            'database' => 'postgres',
+            'username' => env('DB_USERNAME'), // 這裡對應 Render 的設定
+            'password' => env('DB_PASSWORD'),
             'sslmode' => 'require',
         ],
 
