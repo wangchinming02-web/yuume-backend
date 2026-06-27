@@ -80,7 +80,7 @@ return [
             'host' => '54.255.219.82', 
             'port' => 6543, // 強制使用 6543
             'database' => env('DB_DATABASE', 'postgres'),
-            'username' => 'postgres.jjwndfqdenndrqvekisz',
+            'username' => 'postgres',
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
