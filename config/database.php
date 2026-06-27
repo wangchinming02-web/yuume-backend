@@ -79,7 +79,7 @@ return [
             'host' => env('DB_HOST', 'aws-0-ap-southeast-1.pooler.supabase.com'),
             'port' => env('DB_PORT', 6543),
             'database' => env('DB_DATABASE', 'postgres'),
-            'username' => env('DB_USERNAME', 'postgres.jjwndfqdenndrqvekisz'),
+            'username' => env('DB_USERNAME', 'postgres'),
             'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
             'prefix' => '',
