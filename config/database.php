@@ -75,12 +75,8 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => 'aws-0-ap-southeast-1.pooler.supabase.com',
-            'port' => 6543,
-            'database' => 'postgres',
-            'username' => env('DB_USERNAME'), // 這裡對應 Render 的設定
-            'password' => env('DB_PASSWORD'),
-            'sslmode' => 'require',
+            'url' => env('DATABASE_URL'),
+            'sslmode' => 'require', // 強制使用 SSL，對應 Supabase 的連線需求
         ],
 
         'sqlsrv' => [
