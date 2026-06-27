@@ -74,18 +74,18 @@ return [
         ],
 
         'pgsql' => [
-            'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'), // 自動抓取剛設定的 URL
-            'host' => gethostbyname(parse_url(env('DATABASE_URL'), PHP_URL_HOST)), // 強制解析為 IPv4
-            'port' => parse_url(env('DATABASE_URL'), PHP_URL_PORT) ?: 5432,
-            'database' => ltrim(parse_url(env('DATABASE_URL'), PHP_URL_PATH), '/'),
-            'username' => parse_url(env('DATABASE_URL'), PHP_URL_USER),
-            'password' => parse_url(env('DATABASE_URL'), PHP_URL_PASS),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'sslmode' => 'prefer', // 根據 Supabase 連線要求
-        ],
+    'driver' => 'pgsql',
+    'url' => env('DATABASE_URL'),
+    // 使用 null coalescing operator (??) 確保即使變數為 null 也能給預設值
+    'host' => gethostbyname(parse_url(env('DATABASE_URL', ''), PHP_URL_HOST) ?? 'db.jjwndfqdenndrqvekisz.supabase.co'),
+    'port' => parse_url(env('DATABASE_URL', ''), PHP_URL_PORT) ?? 5432,
+    'database' => ltrim(parse_url(env('DATABASE_URL', ''), PHP_URL_PATH) ?? '/postgres', '/'),
+    'username' => parse_url(env('DATABASE_URL', ''), PHP_URL_USER) ?? 'postgres',
+    'password' => parse_url(env('DATABASE_URL', ''), PHP_URL_PASS) ?? env('DB_PASSWORD', ''),
+    'charset' => 'utf8',
+    'prefix' => '',
+    'sslmode' => 'prefer',
+],
 
 
         'sqlsrv' => [
