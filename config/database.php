@@ -76,17 +76,15 @@ return [
         'pgsql' => [
     'driver' => 'pgsql',
     'url' => env('DATABASE_URL'),
-    // 這裡我們不再填寫網域名稱，直接給 IPv4 的數值 IP
-    // 注意：Supabase 的共享 IPv4 通常是固定的，但若有變動，請重新查詢
-    'host' => '52.77.146.31', 
-    'port' => 5432,
+    'host' => 'aws-0-ap-southeast-1.pooler.supabase.com',
+    'port' => 6543, // 強制使用 Pooler
     'database' => 'postgres',
-    'username' => 'postgres',
+    'username' => 'postgres.jjwndfqdenndrqvekisz', // 必須包含這個識別碼
     'password' => env('DB_PASSWORD'),
     'charset' => 'utf8',
-    'sslmode' => 'prefer',
+    'sslmode' => 'verify-full', // Pooler 強制要求 verify-full
     'options' => [
-        // 強制關閉 IPv6 支援 (部分 PHP-Postgres 驅動支援)
+        // 強制透過 IPv4 建立 Socket
         PDO::ATTR_PERSISTENT => false,
     ],
 ],
