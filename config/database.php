@@ -74,20 +74,21 @@ return [
         ],
 
         'pgsql' => [
-    'driver' => 'pgsql',
-    'url' => env('DATABASE_URL'),
-    'host' => 'aws-0-ap-southeast-1.pooler.supabase.com',
-    'port' => 6543, // 強制使用 Pooler
-    'database' => 'postgres',
-    'username' => 'postgres.jjwndfqdenndrqvekisz', // 必須包含這個識別碼
-    'password' => env('DB_PASSWORD'),
-    'charset' => 'utf8',
-    'sslmode' => 'verify-full', // Pooler 強制要求 verify-full
-    'options' => [
-        // 強制透過 IPv4 建立 Socket
-        PDO::ATTR_PERSISTENT => false,
-    ],
-],
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => 'aws-0-ap-southeast-1.pooler.supabase.com',
+            'port' => 6543,
+            'database' => 'postgres',
+            'username' => 'postgres.jjwndfqdenndrqvekisz',
+            'password' => env('DB_PASSWORD'),
+            'charset' => 'utf8',
+            // 關鍵修改：改用 'require'，並手動指定不檢查根憑證路徑
+            'sslmode' => 'require',
+            'options' => [
+                // 這會告訴資料庫驅動程式：不需要檢查本地的 root.crt 檔案
+                PDO::PGSQL_ATTR_SSL_MODE => \PDO::PGSQL_SSL_MODE_REQUIRE,
+            ],
+        ],
 
 
         'sqlsrv' => [
