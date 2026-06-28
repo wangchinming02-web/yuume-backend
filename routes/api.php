@@ -127,3 +127,11 @@ Route::get('/db-test', function () {
         ], 500);
     }
 });
+
+use App\Models\Photo;
+
+Route::get('/test-db', function () {
+    // 嘗試撈出第一筆照片，順便帶出關聯的活動資料
+    $photo = Photo::with(['event', 'member'])->first();
+    return $photo; 
+});
