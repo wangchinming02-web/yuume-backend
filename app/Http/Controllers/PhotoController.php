@@ -96,7 +96,7 @@ class PhotoController extends Controller
             // ⚠️ 備註：請確認你 photos 資料表存網址的欄位是叫 image_url 還是 path。如果是 path，請把下面改成 'path' => $cdnUrl
             DB::table('photos')->insert([
                 'category_id' => $category->id,
-                'image_url'   => $cdnUrl, 
+                'path'   => $cdnUrl, 
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ]);
