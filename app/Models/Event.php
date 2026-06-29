@@ -22,4 +22,15 @@ class Event extends Model
     protected $casts = [
         'event_date' => 'date:Y-m-d',
     ];
+
+    public static function markExpiredAsEnded(): int
+    {
+        $today = now('Asia/Taipei')->toDateString();
+
+        return static::query()
+            ->whereNotNull('event_date')
+            ->where('event_date', '<', $today)
+            ->where('status', '!=', '已結束')
+            ->update(['status' => '已結束']);
+    }
 }

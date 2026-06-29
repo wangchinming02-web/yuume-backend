@@ -114,7 +114,10 @@ Route::get('/check-auth', function (Request $request) {
         : response()->json(['status' => 'unauthenticated'], 401);
 });
 
-Route::get('/events', fn() => Event::orderBy('event_date', 'desc')->get());
+Route::get('/events', function () {
+    Event::markExpiredAsEnded();
+    return Event::orderBy('event_date', 'desc')->get();
+});
 Route::get('/member/{id}', fn($id) => Member::find($id));
 Route::get('/locations', fn() => Event::whereNotNull('location')->where('location', '!=', '')->distinct()->pluck('location'));
 Route::get('/album-categories', fn() => response()->json(AlbumCategory::all(), 200, [], JSON_UNESCAPED_UNICODE));
