@@ -11,10 +11,11 @@ class Event extends Model
 
     // 允許透過 API 批量指派寫入的資料庫欄位
     protected $fillable = [
-        'title', 
-        'event_date', 
-        'location', 
-        'category'
+        'title',
+        'event_date',
+        'location',
+        'category',
+        'status',
     ];
 
     // 💡 加入這個：自動將資料庫的 event_date 轉換為特定的日期字串格式

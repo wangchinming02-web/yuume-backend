@@ -22,6 +22,7 @@ Route::middleware(['admin.token'])->group(function () {
             'event_date' => 'required|date',
             'location' => 'required|string|max:255',
             'category' => 'required|string',
+            'status' => 'nullable|string|max:50',
         ]);
         $event = Event::create($validated);
         return response()->json(['message' => '活動新增成功！', 'event' => $event], 201);
@@ -69,7 +70,7 @@ Route::middleware(['admin.token'])->group(function () {
             $cdnUrl = "https://cdn.jsdelivr.net/gh/" . env('GITHUB_USER') . "/" . env('GITHUB_REPO') . "@" . env('GITHUB_BRANCH', 'main') . "/{$category->folder_slug}/{$fileName}";
             DB::table('photos')->insert([
                 'category_id' => $category->id,
-                'image_url'   => $cdnUrl,
+                'path'        => $cdnUrl,
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ]);
@@ -84,11 +85,24 @@ Route::middleware(['admin.token'])->group(function () {
 | 🔓 公開 API 路由
 |--------------------------------------------------------------------------
 */
-// 這裡使用 env('ADMIN_PASSWORD') 來比對
 Route::post('/admin-login', function (Request $request) {
-    if ($request->input('password') === env('ADMIN_PASSWORD')) {
+    $password = $request->input('password');
+
+    $storedPassword = null;
+    try {
+        if (DB::getSchemaBuilder()->hasTable('admin_settings')) {
+            $storedPassword = DB::table('admin_settings')->where('id', 1)->value('password');
+        }
+    } catch (\Exception $e) {
+        // 資料表不存在或連線異常時，改以環境變數作為備援
+    }
+
+    $validPassword = $storedPassword ?: env('ADMIN_PASSWORD');
+
+    if ($password && $validPassword && $password === $validPassword) {
         return response()->json(['message' => '登入成功', 'token' => 'admin-secret-token']);
     }
+
     return response()->json(['message' => '密碼錯誤'], 401);
 });
 

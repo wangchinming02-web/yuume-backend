@@ -58,7 +58,7 @@ class PhotoController extends Controller
         }
 
         $file = $request->file('photo');
-        
+
         // 生成一個唯一檔名防止重複 (例如: 20260624_a1b2c3.jpg)
         $extension = $file->getClientOriginalExtension();
         $fileName = date('Ymd') . '_' . Str::random(6) . '.' . $extension;
@@ -81,7 +81,7 @@ class PhotoController extends Controller
         $response = Http::withHeaders([
             'Authorization' => "token {$token}",
             'Accept' => 'application/vnd.github.v3+json',
-            'User-Agent' => 'Laravel-Yuume-App' 
+            'User-Agent' => 'Laravel-Yuume-App'
         ])->put($apiUrl, [
             'message' => "Upload photo via Yuume-Backend for: {$category->name}",
             'content' => $fileContent,
@@ -96,7 +96,7 @@ class PhotoController extends Controller
             // ⚠️ 備註：請確認你 photos 資料表存網址的欄位是叫 image_url 還是 path。如果是 path，請把下面改成 'path' => $cdnUrl
             DB::table('photos')->insert([
                 'category_id' => $category->id,
-                'path'   => $cdnUrl, 
+                'path'   => $cdnUrl,
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ]);
@@ -112,5 +112,24 @@ class PhotoController extends Controller
             'message' => 'GitHub API 上傳失敗，請確認 Token 與權限設定',
             'error'   => $response->json()
         ], 500);
+    }
+    public function getPhotosByCategory($folderSlug)
+    {
+        // 如果傳入的是 'all'，撈出所有照片
+        if ($folderSlug === 'all') {
+            $photos = DB::table('photos')->get();
+        } else {
+            // 先找到該資料夾名稱對應的 category_id
+            $category = DB::table('album_categories')->where('folder_slug', $folderSlug)->first();
+
+            if (!$category) {
+                return response()->json([], 404);
+            }
+
+            // 根據 category_id 撈出照片，並且確認欄位名稱為 path
+            $photos = DB::table('photos')->where('category_id', $category->id)->get();
+        }
+
+        return response()->json($photos);
     }
 }
