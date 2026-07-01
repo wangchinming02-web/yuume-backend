@@ -114,6 +114,33 @@ Route::get('/check-auth', function (Request $request) {
         : response()->json(['status' => 'unauthenticated'], 401);
 });
 
+Route::get('/stats', function () {
+    try {
+        if (!DB::getSchemaBuilder()->hasTable('site_stats')) {
+            return response()->json(['total_visits' => 0]);
+        }
+        $row = DB::table('site_stats')->where('id', 1)->first();
+        return response()->json([
+            'total_visits' => (int) ($row->total_visits ?? 0),
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['total_visits' => 0]);
+    }
+});
+
+Route::post('/visit', function () {
+    try {
+        if (!DB::getSchemaBuilder()->hasTable('site_stats')) {
+            return response()->json(['message' => '統計尚未初始化', 'total_visits' => 0], 503);
+        }
+        DB::table('site_stats')->where('id', 1)->increment('total_visits');
+        $total = (int) DB::table('site_stats')->where('id', 1)->value('total_visits');
+        return response()->json(['total_visits' => $total]);
+    } catch (\Exception $e) {
+        return response()->json(['message' => '計數失敗'], 500);
+    }
+});
+
 Route::get('/events', function () {
     Event::markExpiredAsEnded();
     return Event::orderBy('event_date', 'desc')->get();
